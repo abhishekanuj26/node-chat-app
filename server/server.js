@@ -2,7 +2,7 @@ const path=require('path');
 const express=require('express');
 const http=require('http');
 const socketIo=require('socket.io');
-
+const {messageGenerator}=require('./utils/message')
 const publicPath=path.join(__dirname,'../public');
 const port=process.env.PORT || 3000;
 var app=express();
@@ -12,23 +12,12 @@ app.use(express.static(publicPath));
 
 io.on('connection',(socket)=>{
     console.log('new user connected');
-    socket.emit('newMessage',{
-        from:"admin",
-        text:"welcome to live-chat app",
-        at:new Date().getTime()
-    });
-    socket.broadcast.emit('newMessage',{
-        from:"admin",
-        text:"new user joined",
-        at:new Date().getTime()
-    })
+    socket.emit('newMessage',messageGenerator('admin','welcome to live-chat app'));
+    socket.broadcast.emit('newMessage',messageGenerator('admin','new user joined'));
+
     socket.on('createMessage',(message)=>{
         console.log('new message',message);
-        io.emit('newMessage',{
-            from:message.from,
-            text:message.text,
-            at:new Date().getTime()
-        });
+        io.emit('newMessage',messageGenerator(message.from,message.text));
     });
     socket.on('disconnect',()=>{
         console.log('client disconnected');
