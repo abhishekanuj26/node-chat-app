@@ -5,4 +5,12 @@ var messageGenerator = (from,text)=>{
     at : new Date().getTime()
 }
 };
-module.exports={messageGenerator};
+
+var locationGenerator= (from,lat,lon)=>{
+    return{
+        from,
+        url:`https://www.google.com/maps?q=${lat},${lon}`,
+        at : new Date().getTime()
+    }
+};
+module.exports={messageGenerator,locationGenerator};
