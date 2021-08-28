@@ -7,7 +7,9 @@ socket.on('disconnect',function(){
     console.log('disconnected');
 });
 socket.on('newMessage',function(message){
-
+   
+    
+    jQuery('#send-m').removeAttr('disabled')
     var template = jQuery('#message-template').html();
     var html=Mustache.render(template,{
         text:message.text,
@@ -22,6 +24,7 @@ socket.on('newMessage',function(message){
     li.text(`${message.from}: ${message.text}`);
     jQuery('#messages').append(li);
     */
+
     
 });
 
