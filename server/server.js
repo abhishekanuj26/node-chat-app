@@ -3,7 +3,8 @@ const express=require('express');
 const http=require('http');
 const socketIo=require('socket.io');
 
-const {messageGenerator,locationGenerator}=require('./utils/message')
+const {messageGenerator,locationGenerator}=require('./utils/message');
+const { callbackify } = require('util');
 const publicPath=path.join(__dirname,'../public');
 const port=process.env.PORT || 3000;
 var app=express();
@@ -16,9 +17,10 @@ io.on('connection',(socket)=>{
     socket.emit('newMessage',messageGenerator('admin','welcome to live-chat app'));
     socket.broadcast.emit('newMessage',messageGenerator('admin','new user joined'));
 
-    socket.on('createMessage',(message)=>{
+    socket.on('createMessage',(message,callback)=>{
         console.log('new message',message);
         io.emit('newMessage',messageGenerator(message.from,message.text));
+       callback();
     });
 
 

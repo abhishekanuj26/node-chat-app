@@ -33,7 +33,7 @@ jQuery('#m-form').on('submit',function(e){
         from:"User",
         text:jQuery('[name=message]').val()
     },function(){
-
+        jQuery('[name=message]').val(" ");
     });
 });
 
@@ -44,13 +44,16 @@ jQuery('#s-location').on('click',function(){
     if(!navigator.geolocation){
         return alert('geoloaction not supported by your device')
     }
-
+    jQuery('#s-location').attr('disabled','disabled').text('sharing location...');
     navigator.geolocation.getCurrentPosition(function(position){
+        jQuery('#s-location').removeAttr('disabled').text('share location');
         socket.emit('createLocation',{
+
             longitude:position.coords.longitude,
             latitude:position.coords.latitude
         })
     },function(){
+        jQuery('#s-location').removeAttr('disabled').text('share location');
         alert('unable to fetch location')
     });
     
