@@ -1,10 +1,31 @@
 var socket=io();
 socket.on('connect',function(){
     console.log('connected to the server');
+    var params=jQuery.deparam(window.location.search);
+    socket.emit('join',params,function(err){
+        if(err){
+            alert(err);
+            window.location.href='/';
+        }
+        else{
+            console.log('no error');
+        }
+    });
    
 });
 socket.on('disconnect',function(){
     console.log('disconnected');
+});
+
+
+socket.on('update-user-list',function(users){
+    console.log(users);
+
+    var ol=jQuery('<ol></ol>');
+    users.forEach(function(users){
+        ol.append(jQuery('<li></li>)').text(users));
+    });
+    jQuery('#users').html(ol);
 });
 socket.on('newMessage',function(message){
    
@@ -47,6 +68,9 @@ socket.on('newLocationMessage',function(message){
     */
 
 });
+
+
+
 
 jQuery('#m-form').on('submit',function(e){
     e.preventDefault();
